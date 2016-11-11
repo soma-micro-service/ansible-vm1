@@ -1,0 +1,11 @@
+---
+- name: Run docker registry and configure
+  hosts: infra
+  remote_user: root
+  roles:
+    - docker_registry 
+- name: Run jenkins and configure
+  hosts: infra
+  remote_user: root
+  roles:
+    - jenkins

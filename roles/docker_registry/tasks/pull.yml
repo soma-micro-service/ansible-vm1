@@ -1,0 +1,4 @@
+---
+- name: pull registry image 
+  docker_image:
+    name: "{{ base_registry_url }}/registry:2"

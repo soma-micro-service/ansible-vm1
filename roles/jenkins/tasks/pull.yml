@@ -1,0 +1,4 @@
+---
+- name: pull jenkins image
+  docker_image:
+    name: "{{ base_registry_url }}/myjenkins:latest"

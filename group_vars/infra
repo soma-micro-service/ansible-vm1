@@ -1,0 +1,12 @@
+---
+project_id: test
+
+# base registry
+base_registry_ip: 192.168.11.66
+base_registry_port: 5000
+base_registry_url: "{{ base_registry_ip }}:{{ base_registry_port }}"
+
+# jenkins
+config_dir: /home/micros
+jenkins_port: 8080
+jenkins_test_url: "http://172.17.0.4:{{ jenkins_port }}"

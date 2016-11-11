@@ -1,0 +1,6 @@
+---
+- name: run registry container
+  docker_container:
+   name: "registry-{{ project_id }}"
+   image: "{{ base_registry_url }}/registry:2" 
+   ports: "5001:5000"

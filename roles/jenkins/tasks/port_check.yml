@@ -1,0 +1,16 @@
+---
+
+- name: Checking 8080 port for jenkins
+  wait_for: 
+    host: 0.0.0.0 
+    port: 8081
+    timeout: 5 
+    state: stopped
+- name: Checking 50000 port for jenkins
+  wait_for: 
+    host: 0.0.0.0 
+    port: 50001
+    timeout: 5 
+    state: stopped
+
+

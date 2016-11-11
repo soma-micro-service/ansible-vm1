@@ -1,0 +1,25 @@
+---
+- name: Run jenkins container
+  docker_container:
+   name: "jenkins-{{ project_id }}"
+   image: "{{ base_registry_url }}/myjenkins:latest"
+   ports:
+    - "50001:50000"
+    - "6681:{{ jenkins_port }}"
+  register: jenkins
+
+- name: Create a job using config.xml file
+  uri:
+    url: "http://{{ jenkins['ansible_facts']['ansible_docker_container']['NetworkSettings']['IPAddress'] }}:{{ jenkins_port }}/createItem?name={{ project_id }}"
+    method: POST
+    HEADER_Content-Type: "application/xml"
+    body: "{{ lookup('file','{{ config_dir }}/config.xml') }}"
+  register: result
+  until: result|success
+  retries: 10
+
+- name: Build service code
+  uri:
+    url: "http://{{ jenkins['ansible_facts']['ansible_docker_container']['NetworkSettings'][    'IPAddress'] }}:{{ jenkins_port }}/job/{{ project_id }}/build"
+    method: POST
+    status_code: 201
