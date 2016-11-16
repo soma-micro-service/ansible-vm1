@@ -1,0 +1,59 @@
+heat_template_version: 2014-10-16
+
+description: |
+  Deploy Ubuntu Trusty by Cloud Image
+
+parameters:
+  image:
+    type: string
+  key_name:
+    type: string
+    label: Key Name
+    description: Name of key-pair to be used for compute instance
+  network:
+    type: string
+
+resources:
+  server_pw:
+    type: OS::Heat::RandomString
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      key_name: { get_param: key_name }
+      admin_pass: { get_attr: [ server_pw, value ] }
+      flavor: m1.heat
+      user_data_format: RAW
+      user_data:
+        get_resource: server_init
+      networks:
+        - network: { get_param: network }
+  server_init:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+      - config: {get_resource: config}
+  config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      inputs:
+      - name: hyeonjin
+      group: ungrouped
+      config: |
+        #!/bin/bash
+        echo "Hello World" > /tmp/hey.txt
+        echo "I'm $name" >> /tmp/hey.txt
+
+outputs:
+  server_ip:
+    description: Server IP Address
+    value:
+      get_attr: [ server, accessIPv4 ]
+  server_networks:
+    description: Server Networks
+    value:
+      get_attr: [ server, networks ]
+  server_password:
+    description: Server Password
+    value:
+      get_attr: [ server_pw, value ]

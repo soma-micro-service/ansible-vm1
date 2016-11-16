@@ -1,0 +1,80 @@
+<project>
+   <actions/>
+   <description/>
+   <keepDependencies>false</keepDependencies>
+   <properties/>
+   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.0.0">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+         <hudson.plugins.git.UserRemoteConfig>
+            <url>https://github.com/xzvfinet/simple_django.git</url>
+        </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+     <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+    </hudson.plugins.git.BranchSpec>
+</branches>
+<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+<submoduleCfg class="list"/>
+<extensions/>
+</scm>
+<canRoam>true</canRoam>
+<disabled>false</disabled>
+<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+<triggers>
+  <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.22.3">
+     <spec/>
+ </com.cloudbees.jenkins.GitHubPushTrigger>
+</triggers>
+<concurrentBuild>false</concurrentBuild>
+<builders>
+  <hudson.tasks.Shell>
+     <command>cp ~/Dockerfiles/django/Dockerfile $WORKSPACE/</command>
+ </hudson.tasks.Shell>
+ <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+     <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.CreateImageCommand">
+        <dockerFolder>$WORKSPACE</dockerFolder>
+        <imageTag>172.17.0.4:5000/$JOB_NAME</imageTag>
+        <noCache>false</noCache>
+        <rm>false</rm>
+    </dockerCmd>
+</org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+<org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+ <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
+    <dockerRegistryEndpoint plugin="docker-commons@1.5">
+       <url>http://172.17.0.4:5000/v2</url>
+   </dockerRegistryEndpoint>
+   <image>172.17.0.4:5000/$JOB_NAME</image>
+   <tag>latest</tag>
+   <registry/>
+</dockerCmd>
+</org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+<org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+ <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.RemoveCommand">
+    <containerIds>simple-django-app</containerIds>
+    <ignoreIfNotFound>true</ignoreIfNotFound>
+    <removeVolumes>false</removeVolumes>
+    <force>true</force>
+</dockerCmd>
+</org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+<org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+ <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.CreateContainerCommand">
+    <image>172.17.0.4:5000/$JOB_NAME</image>
+    <command/>
+    <hostName/>
+    <containerName>simple-django-app</containerName>
+    <envVars/>
+    <links/>
+    <exposedPorts>8000/tcp</exposedPorts>
+    <cpuShares/>
+    <memoryLimit/>
+</dockerCmd>
+</org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+</builders>
+<publishers/>
+<buildWrappers>
+  <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.7"/>
+</buildWrappers>
+</project>

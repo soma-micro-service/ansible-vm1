@@ -1,0 +1,18 @@
+---
+
+- name: Create docker/certs.d/ directory
+  file: "path=/etc/docker/certs.d/{{ base_registry_ip }}:{{ base_registry_port }} state=directory mode=0755"
+  become: true
+  become_user: fedora
+- name: Copy base_registry.crt
+  copy: "src=files/base_registry.crt dest=/etc/docker/certs.d/{{ base_registry_ip }}:{{ base_registry_port }}/base_registry.crt"
+  become: true
+  become_user: fedora
+- name: Create /etc/docker/certs.d/jenkins directory
+  file: "path=/etc/docker/certs.d/jenkins state=directory mode=0755"
+  become: true
+  become_user: fedora
+- name: Copy jenkins job config.xml
+  copy: src=files/config.xml dest=/etc/docker/certs.d/jenkins/config.xml
+  become: true
+  become_user: fedora

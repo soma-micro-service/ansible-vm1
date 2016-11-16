@@ -4,8 +4,8 @@
    name: "jenkins-{{ project_id }}"
    image: "{{ base_registry_url }}/myjenkins:latest"
    ports:
-    - "50001:50000"
-    - "6681:{{ jenkins_port }}"
+    - "50000:50000"
+    - "{{ jenkins_port }}:{{ jenkins_port }}"
   register: jenkins
 
 - name: Create a job using config.xml file

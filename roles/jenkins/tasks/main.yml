@@ -1,4 +1,4 @@
 ---
 - include: port_check.yml
 - include: pull.yml
-- include: make.yml
+- include: run.yml

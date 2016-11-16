@@ -1,6 +1,26 @@
 ---
+- file: path=/certs state=directory mode=0755
+  become: true
+  become_user: root
+- name: Create certificatew for local_registry
+  become: true
+  become_user: root
+  expect:
+    command: openssl req -newkey rsa:4096 -nodes -sha256 -keyout /certs/local_registry.key -x509 -days 365 -out /certs/local_registry.crt
+    responses:
+      Country+: KO
+      State+: GwanAk
+      Locality+: Seoul
+      Organization+: Software Maestro 7th
+      Organizational+: Mentee
+      FQDN+: "{{ ansible_default_ipv4.address }}"
 - name: run registry container
   docker_container:
    name: "registry-{{ project_id }}"
    image: "{{ base_registry_url }}/registry:2" 
    ports: "5001:5000"
+   volumes: /certs:/certs
+   env:
+     REGISTRY_HTTP_TLS_CERTIFICATE: /certs/local_registry.crt
+     REGISTRY_HTTP_TLS_KEY: /certs/local_registry.key
+

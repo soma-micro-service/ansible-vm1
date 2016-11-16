@@ -1,5 +1,4 @@
 ---
-- include: create_cert.yml
 - include: port_check.yml
 - include: pull.yml
 - include: run.yml

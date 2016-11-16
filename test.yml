@@ -1,0 +1,6 @@
+---
+- name: test role
+  hosts: infra
+  remote_user: root
+  roles:
+    - heat

@@ -1,0 +1,7 @@
+---
+project_id: test
+
+# base registry
+base_registry_ip: 192.168.0.33
+base_registry_port: 5000
+base_registry_url: "{{ base_registry_ip }}:{{ base_registry_port }}"
