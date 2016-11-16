@@ -1,0 +1,5 @@
+---
+- shell: uuidgen
+  register: uuid
+- set_fact:
+    project_id: “{{ project_name }}-{{ uuid[‘stdout’] }}”
