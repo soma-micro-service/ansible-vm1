@@ -14,7 +14,7 @@
 - debug: var=test
 
 - name: Get kubemaster's ip
-  command: bash -c "openstack stack show {{ project_id }} | grep {{ ip_range }} | awk '{print $4}'"
+  command: bash -c "openstack stack show {{ project_id }} | grep -m 1 {{ ip_range }} | awk '{print $4}'"
   register: ip_address
 
 - name: Add kubemaster to host list
