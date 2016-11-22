@@ -1,6 +1,6 @@
 ---
 - name: test role
-  hosts: infra
+  hosts: localhost
   remote_user: root
   roles:
-    - heat
+    - cluster

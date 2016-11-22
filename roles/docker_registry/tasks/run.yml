@@ -2,6 +2,11 @@
 - file: path=/certs state=directory mode=0755
   become: true
   become_user: root
+- name: Install pexpect module
+  pip: name=pexpect
+- command: bash -c "pip list"
+  register: result
+- debug: var=result
 - name: Create certificatew for local_registry
   become: true
   become_user: root

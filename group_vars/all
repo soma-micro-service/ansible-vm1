@@ -1,8 +1,8 @@
 ---
-project_name: test
-ip_range: 192.168.11
+project_name: hajin
+ip_range: 10.0.0
 
 # base registry
-base_registry_ip: 192.168.0.33
+base_registry_ip: 192.168.0.66
 base_registry_port: 5000
 base_registry_url: "{{ base_registry_ip }}:{{ base_registry_port }}"

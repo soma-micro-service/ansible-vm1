@@ -1,21 +1,36 @@
 ---
-- name: Hyeonjin HEAT
-  hosts: localhost
-  remote_user: root
-  roles:
-    - heat
+- hosts: infra
+  gather_facts: False
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
+      become: true
+    - command: bash -c "echo \"127.0.0.1 $(hostname)\" > /etc/hosts"
+      become: true
+#    - command: bash -c "sed -i.bak '/deb\shttp:\/\/nova\.clouds\.archive\.ubuntu\.com\/ubuntu\/\sxenial-updates\suniverse/d' /etc/apt/sources.list"
+    - command: bash -c "sed -i 's/nova\.clouds\.archive\.ubuntu\.com/kr\.archive\.ubuntu\.com/g' /etc/apt/sources.list"
+      become: true
+    - name: Install python-pip
+      apt:
+        name: python-pip
+      become: true
+    - name: Install docker
+      command: bash -c "test -e /usr/bin/docker || (curl -sSL https://get.docker.com/ | sh)"
+    - command: bash -c "usermod -aG docker $(whoami)"
+      become: true
 - name: Copy certificate file for accessing to base registry
   hosts: infra
-  remote_user: fedora
+  remote_user: ubuntu
   roles:
     - pre_production
 - name: Run docker registry and configure
   hosts: infra
-  remote_user: fedora
+  remote_user: "{{ infra_user }}"
   roles:
     - docker_registry 
 - name: Run jenkins and configure
   hosts: infra
-  remote_user: fedora
+  remote_user: "{{ infra_user }}"
   roles:
     - jenkins
