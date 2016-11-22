@@ -1,0 +1,21 @@
+---
+- name: Configure cluster
+  hosts: localhost
+  remote_user: root
+  roles:
+    - cluster
+- name: Copy certificate file for accessing to base registry
+  hosts: infra
+  remote_user: fedora
+  roles:
+    - pre_production
+- name: Run docker registry and configure
+  hosts: infra
+  remote_user: fedora
+  roles:
+    - docker_registry 
+- name: Run jenkins and configure
+  hosts: infra
+  remote_user: fedora
+  roles:
+    - jenkins

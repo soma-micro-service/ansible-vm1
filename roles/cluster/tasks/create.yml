@@ -1,0 +1,18 @@
+---
+- name: Setting for cluster
+  command: bash -c "files/cluster_infra.sh {{ project_id }}"
+
+- name: Cluster create
+  command: bash -c "./files/cluster_create.sh {{ project_id }}"
+
+- name: Wait until stack create success
+  command: bash -c "magnum cluster-show {{ project_id }} | awk '/ api_address /{print $4}'"
+  register: result
+  until: result['stdout'] != "-"
+  retries: 10
+  delay: 60
+
+- debug: var=result
+
+- name: Cluster config
+  command: bash -c "files/cluster_config.sh {{ project_id }}"
