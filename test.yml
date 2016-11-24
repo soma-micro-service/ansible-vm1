@@ -1,6 +1,5 @@
 ---
-- name: test role
-  hosts: localhost
-  remote_user: root
+- name: Create jenkins job and build
+  hosts: infra
   roles:
-    - cluster
+    - jenkins

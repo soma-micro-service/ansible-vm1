@@ -1,0 +1,18 @@
+---
+- hosts: kubemaster
+  gather_facts: False
+  roles:
+    - defunctzombie.coreos-bootstrap
+- name: Copy certificate file for accessing to base registry
+  hosts: kubemaster
+  remote_user: root
+  roles:
+    - pre_production
+- name: Create jenkins job and build
+  hosts: infra 
+  roles:
+    - jenkins
+- name: HOT Trigger
+  hosts: localhost
+  roles:
+    - heat

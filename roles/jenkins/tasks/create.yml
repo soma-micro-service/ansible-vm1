@@ -1,0 +1,11 @@
+---
+- name: Run jenkins container
+  docker_container:
+   name: "jenkins-{{ project_id }}"
+   image: "{{ base_registry_url }}/myjenkins:latest"
+   ports:
+    - "50000:50000"
+    - "{{ jenkins_port }}:8080"
+  register: jenkins
+
+

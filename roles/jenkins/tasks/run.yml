@@ -1,25 +1,23 @@
 ---
-- name: Run jenkins container
-  docker_container:
-   name: "jenkins-{{ project_id }}"
-   image: "{{ base_registry_url }}/myjenkins:latest"
-   ports:
-    - "50000:50000"
-    - "{{ jenkins_port }}:{{ jenkins_port }}"
-  register: jenkins
-
+#- name: Copy jenkins job config.xml
+#  copy: src=files/config.xml dest="{{ config_dir }}/"
+#  become: true
+#  become_user: root
 - name: Create a job using config.xml file
   uri:
-    url: "http://{{ jenkins['ansible_facts']['ansible_docker_container']['NetworkSettings']['IPAddress'] }}:{{ jenkins_port }}/createItem?name={{ project_id }}"
+#    url: "http://{{ jenkins['ansible_facts']['ansible_docker_container']['NetworkSettings']['IPAddress'] }}:{{ jenkins_port }}/createItem?name={{ project_id }}"
+    url: "{{ jenkins_url }}/createItem?name={{ project_id }}"
     method: POST
     HEADER_Content-Type: "application/xml"
-    body: "{{ lookup('file','{{ config_dir }}/config.xml') }}"
+    #body: "{{ lookup('file','{{ config_dir }}/config.xml') }}"
+    body: "{{ lookup('file','files/config.xml') }}"
   register: result
   until: result|success
   retries: 10
 
 - name: Build service code
   uri:
-    url: "http://{{ jenkins['ansible_facts']['ansible_docker_container']['NetworkSettings'][    'IPAddress'] }}:{{ jenkins_port }}/job/{{ project_id }}/build"
+#    url: "http://{{ jenkins['ansible_facts']['ansible_docker_container']['NetworkSettings'][    'IPAddress'] }}:{{ jenkins_port }}/job/{{ project_id }}/build"
+    url: "{{ jenkins_url }}/job/{{ project_id }}/build"
     method: POST
     status_code: 201

@@ -1,5 +1,5 @@
 ---
-project_name: hajin
+project_id: hajin
 ip_range: 10.0.0
 
 # base registry

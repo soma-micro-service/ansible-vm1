@@ -16,7 +16,7 @@ fi
 
 if ! kubectl > /dev/null 2>&1
 then
-wget https://github.com/kubernetes/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz
+wget https://github.com/kubernetes/kubernetes/releases/download/v1.4.6/kubernetes.tar.gz
 tar -xvzf kubernetes.tar.gz
 sudo cp -a kubernetes/platforms/linux/amd64/kubectl /usr/bin/kubectl
 fi
